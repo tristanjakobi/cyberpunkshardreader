@@ -13,7 +13,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import Rating from "@mui/material/Rating";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import CyberpunkLoader from "./CyberpunkLoader";
 import {
   Box,
@@ -32,6 +32,7 @@ export default function Home() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [hideRead, setHideRead] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +81,15 @@ export default function Home() {
       window.removeEventListener("hashchange", handleHashChange);
     };
   }, [data]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const pageParam = parseInt(params.get("page"), 10);
+    const rowsPerPageParam = parseInt(params.get("rowsPerPage"), 10);
+
+    if (!isNaN(pageParam)) setPage(pageParam);
+    if (!isNaN(rowsPerPageParam)) setRowsPerPage(rowsPerPageParam);
+  }, [location.search]);
 
   const handleFavourite = (itemIndex) => {
     const newData = data.map((item) =>
@@ -132,11 +142,14 @@ export default function Home() {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    navigate(`?page=${newPage}&rowsPerPage=${rowsPerPage}`);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const newRowsPerPage = parseInt(event.target.value, 10);
+    setRowsPerPage(newRowsPerPage);
     setPage(0);
+    navigate(`?page=0&rowsPerPage=${newRowsPerPage}`);
   };
 
   const paginatedData = useMemo(() => {
@@ -225,7 +238,10 @@ export default function Home() {
                     navigate(`/cyberpunkshardreader/${row.index}`);
                   }}
                 >
-                  {row.description}
+                  {row.description.length > 100
+                    ? row.description.substring(0, 100).replace(/\s\w+$/, "") +
+                      " [...]"
+                    : row.description}
                 </TableCell>
                 <TableCell>
                   {row.averageScore ? (

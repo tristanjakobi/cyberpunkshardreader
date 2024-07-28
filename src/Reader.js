@@ -30,6 +30,19 @@ export default function Reader() {
     readability: 0,
   });
 
+  const handleRead = (index) => {
+    const newData = [...data];
+    if (!newData[index]?.read) {
+      const storedReadData = JSON.parse(localStorage.getItem("readData")) || [];
+      storedReadData[index] = { read: true };
+      localStorage.setItem("readData", JSON.stringify(storedReadData));
+    } else {
+      newData[index].read = !newData[index].read;
+      setData(newData);
+      localStorage.setItem("readData", JSON.stringify(newData));
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`${process.env.PUBLIC_URL}/data.xlsx`);
@@ -49,6 +62,10 @@ export default function Reader() {
       }));
 
       setData(mergedData);
+
+      if (localStorage.getItem("autoRead")) {
+        handleRead(id);
+      }
     };
 
     fetchData();
@@ -66,13 +83,6 @@ export default function Reader() {
     newData[index].favourite = !newData[index].favourite;
     setData(newData);
     localStorage.setItem("favouriteData", JSON.stringify(newData));
-  };
-
-  const handleRead = (index) => {
-    const newData = [...data];
-    newData[index].read = !newData[index].read;
-    setData(newData);
-    localStorage.setItem("readData", JSON.stringify(newData));
   };
 
   const handleRatingChange = (category, value) => {
@@ -93,7 +103,7 @@ export default function Reader() {
   };
 
   const handleBack = () => {
-    navigate("/cyberpunkshardreader#" + id);
+    navigate(-1);
   };
 
   const item = data[id];

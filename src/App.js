@@ -137,10 +137,13 @@ const cyberpunkTheme = createTheme({
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [font, setFont] = useState("Tomorrow");
+  const [autoRead, setAutoRead] = useState(false);
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode");
     const savedFont = localStorage.getItem("font");
+
+    const savedAutoRead = localStorage.getItem("autoRead");
 
     if (savedDarkMode !== null) {
       setDarkMode(JSON.parse(savedDarkMode));
@@ -151,6 +154,10 @@ function App() {
       );
     }
 
+    if (savedAutoRead !== null) {
+      setAutoRead(JSON.parse(savedAutoRead));
+    }
+
     if (savedFont) {
       setFont(savedFont);
     }
@@ -159,6 +166,11 @@ function App() {
   const toggleDarkMode = () => {
     localStorage.setItem("darkMode", JSON.stringify(!darkMode));
     setDarkMode(!darkMode);
+  };
+
+  const toggleAutoRead = () => {
+    localStorage.setItem("autoRead", JSON.stringify(!autoRead));
+    setAutoRead(!autoRead);
   };
 
   const handleFontChange = (event) => {
@@ -181,6 +193,9 @@ function App() {
           <MenuItem value="Oxanium">Oxanium</MenuItem>
           <MenuItem value="Arial">Arial</MenuItem>
         </Select>
+        <Button onClick={toggleAutoRead}>
+          {autoRead ? "Disable Auto Read" : "Enable Auto Read"}
+        </Button>
         <Router>
           <Routes>
             <Route
