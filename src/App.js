@@ -199,14 +199,14 @@ function App() {
         <Router>
           <Routes>
             <Route
+              path="/cyberpunkshardreader/reader/:id"
+              element={<Reader isDarkMode={darkMode} font={font} />}
+            />
+            <Route
               path="/cyberpunkshardreader"
               element={<Home isDarkMode={darkMode} font={font} />}
             />
             <Route path="*" element={<Home />} />
-            <Route
-              path="/cyberpunkshardreader/:id"
-              element={<Reader isDarkMode={darkMode} font={font} />}
-            />
           </Routes>
         </Router>
       </ThemeProvider>

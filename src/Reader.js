@@ -86,8 +86,6 @@ export default function Reader() {
   };
 
   const handleRatingChange = (category, value) => {
-    //add average
-
     const ratingsWithoutAverage = { ...ratings, [category]: value };
     const average =
       (ratingsWithoutAverage.fun +
@@ -106,72 +104,100 @@ export default function Reader() {
     navigate(-1);
   };
 
+  const handlePrevious = () => {
+    if (id > 0) {
+      navigate(`/cyberpunkshardreader/reader/${parseInt(id) - 1}`);
+    }
+  };
+
+  const handleNext = () => {
+    if (id < data.length - 1) {
+      navigate(`/cyberpunkshardreader/reader/${parseInt(id) + 1}`);
+    }
+  };
+
   const item = data[id];
 
   return (
-    <Box sx={{ padding: 2 }}>
-      {item ? (
-        <Card sx={{ maxWidth: 800, margin: "auto", padding: 2 }}>
-          <Button onClick={handleBack} variant="contained" color="primary">
-            Back
-          </Button>
-          <CardContent>
-            <Typography variant="h4" gutterBottom>
-              {item.title}
-            </Typography>
-            <Typography variant="subtitle1" gutterBottom>
-              {item.description}
-            </Typography>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <Box sx={{ padding: 2, maxWidth: 800 }}>
+        {item ? (
+          <Card sx={{ margin: "auto", padding: 2 }}>
+            <Button onClick={handleBack} variant="contained" color="primary">
+              Back
+            </Button>
+            <CardContent>
+              <Typography variant="h4" gutterBottom>
+                {item.title}
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                {item.description}
+              </Typography>
 
-            <br></br>
-            <Typography variant="body1" gutterBottom>
-              {item.content}
-            </Typography>
-            <Grid container spacing={2} sx={{ marginTop: 2 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography component="legend">Fun</Typography>
-                <Rating
-                  name="fun"
-                  value={ratings.fun}
-                  onChange={(event, newValue) =>
-                    handleRatingChange("fun", newValue)
-                  }
-                />
+              <br></br>
+              <Typography variant="body1" gutterBottom>
+                {item.content}
+              </Typography>
+              <Grid container spacing={2} sx={{ marginTop: 2 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography component="legend">Fun</Typography>
+                  <Rating
+                    name="fun"
+                    value={ratings.fun}
+                    onChange={(event, newValue) =>
+                      handleRatingChange("fun", newValue)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Typography component="legend">Interestingness</Typography>
+                  <Rating
+                    name="interestingness"
+                    value={ratings.interestingness}
+                    onChange={(event, newValue) =>
+                      handleRatingChange("interestingness", newValue)
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Typography component="legend">Readability</Typography>
+                  <Rating
+                    name="readability"
+                    value={ratings.readability}
+                    onChange={(event, newValue) =>
+                      handleRatingChange("readability", newValue)
+                    }
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <Typography component="legend">Interestingness</Typography>
-                <Rating
-                  name="interestingness"
-                  value={ratings.interestingness}
-                  onChange={(event, newValue) =>
-                    handleRatingChange("interestingness", newValue)
-                  }
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <Typography component="legend">Readability</Typography>
-                <Rating
-                  name="readability"
-                  value={ratings.readability}
-                  onChange={(event, newValue) =>
-                    handleRatingChange("readability", newValue)
-                  }
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
-          <CardActions>
-            <IconButton onClick={() => handleFavourite(id)}>
-              {item.favourite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            </IconButton>
-            <IconButton onClick={() => handleRead(id)}>
-              {item.read ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-            </IconButton>
-          </CardActions>
-        </Card>
-      ) : (
-        <CyberpunkLoader />
-      )}
-    </Box>
+            </CardContent>
+            <CardActions>
+              <IconButton onClick={() => handleFavourite(id)}>
+                {item.favourite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              </IconButton>
+              <IconButton onClick={() => handleRead(id)}>
+                {item.read ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+              </IconButton>
+            </CardActions>
+          </Card>
+        ) : (
+          <CyberpunkLoader />
+        )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: 2,
+          }}
+        >
+          <Button size="small" onClick={handlePrevious}>
+            Previous Page
+          </Button>
+          <Button size="small" onClick={handleNext}>
+            Next Page
+          </Button>
+        </Box>
+      </Box>
+    </div>
   );
 }

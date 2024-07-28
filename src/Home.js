@@ -194,7 +194,6 @@ export default function Home() {
           <MenuItem value="Religion and Philosophy shards">
             Religion and Philosophy shards
           </MenuItem>
-          <MenuItem value="averageScore">Average Score</MenuItem>
         </Select>
         <Button
           variant="contained"
@@ -228,14 +227,14 @@ export default function Home() {
                 <TableCell>{row.index + page * rowsPerPage}</TableCell>
                 <TableCell
                   onClick={() => {
-                    navigate(`/cyberpunkshardreader/${row.index}`);
+                    navigate(`/cyberpunkshardreader/reader/${row.index}`);
                   }}
                 >
                   {row.title}
                 </TableCell>
                 <TableCell
                   onClick={() => {
-                    navigate(`/cyberpunkshardreader/${row.index}`);
+                    navigate(`/cyberpunkshardreader/reader/${row.index}`);
                   }}
                 >
                   {row.description.length > 100
@@ -274,7 +273,7 @@ export default function Home() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 50, 100]}
+        rowsPerPageOptions={[10, 50, 100, 1500]}
         component="div"
         count={filteredData.length}
         rowsPerPage={rowsPerPage}
