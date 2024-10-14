@@ -179,6 +179,32 @@ function App() {
     window.location.reload();
   };
 
+  const exportLocalStorage = () => {
+    const data = JSON.stringify(localStorage);
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "localStorage.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importLocalStorage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = JSON.parse(e.target.result);
+        for (const key in data) {
+          localStorage.setItem(key, data[key]);
+        }
+        window.location.reload();
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <div
       className={`App ${darkMode ? "dark-mode" : ""}`}
@@ -195,6 +221,16 @@ function App() {
         </Select>
         <Button onClick={toggleAutoRead}>
           {autoRead ? "Disable Auto Read" : "Enable Auto Read"}
+        </Button>
+        <Button onClick={exportLocalStorage}>Export Local Storage</Button>
+        <Button component="label">
+          Import Local Storage
+          <input
+            type="file"
+            accept=".json"
+            style={{ display: "none" }}
+            onChange={importLocalStorage}
+          />
         </Button>
         <Router>
           <Routes>
