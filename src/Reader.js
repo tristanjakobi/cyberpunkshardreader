@@ -131,13 +131,32 @@ export default function Reader() {
                 {item.title}
               </Typography>
               <Typography variant="subtitle1" gutterBottom>
-                {item.description}
+                {item.summary}
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                RoboReader says: {item.comment}
               </Typography>
 
               <br></br>
               <Typography variant="body1" gutterBottom>
                 {item.content}
               </Typography>
+
+              <Grid container spacing={2} sx={{ marginTop: 2 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography component="legend">Interestingness Score</Typography>
+                  <Rating name="interestingness_score" value={item.interestingness_score} readOnly />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Typography component="legend">Funness Score</Typography>
+                  <Rating name="funness_score" value={item.funness_score} readOnly />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Typography component="legend">Readability Score</Typography>
+                  <Rating name="readability_score" value={item.readability_score} readOnly />
+                </Grid>
+              </Grid>
+
               <Grid container spacing={2} sx={{ marginTop: 2 }}>
                 <Grid item xs={12} sm={4}>
                   <Typography component="legend">Fun</Typography>
